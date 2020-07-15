@@ -1,4 +1,8 @@
 <?php
+/**
+ * For the copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace MongoLite;
 
@@ -118,7 +122,7 @@ class Collection {
     public function save(&$document, $create = false) {
 
         if (isset($document['_id'])) {
-            $ret = $this->update(['_id' => $document['_id']], $document);
+            $ret = $this->update(['_id' => $document['_id']], ['$set' => $document]);
 
             // insert document if document doesn't exist
             if (!$ret && $create) {
@@ -148,7 +152,7 @@ class Collection {
         foreach ($result as &$doc) {
 
             $_doc            = \json_decode($doc['document'], true);
-            $document        = $merge ? \array_merge($_doc, $data) : $data;
+            $document        = $merge ? \array_merge($_doc, isset($data['$set']) ? $data['$set'] : []) : $data;
             $document['_id'] = $_doc['_id'];
 
             $sql = 'UPDATE '.$this->name.' SET document='.$this->database->connection->quote(json_encode($document, JSON_UNESCAPED_UNICODE)).' WHERE id='.$doc['id'];

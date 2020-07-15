@@ -1,4 +1,8 @@
 <?php
+/**
+ * For the copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace MongoLite;
 
@@ -287,14 +291,21 @@ class UtilArrayQuery {
                         $fn[] = "\\MongoLite\\UtilArrayQuery::check((isset({$d}) ? {$d} : null), ".\var_export($value, true).')';
                     } else {
 
-                        $_value = \var_export($value, true);
+                        if (is_null($value)) {
 
-                        $fn[] = "(isset({$d}) && (
-                                    is_array({$d}) && is_string({$_value})
-                                        ? in_array({$_value}, {$d})
-                                        : {$d}=={$_value}
-                                    )
-                                )";
+                            $fn[] = "(!isset({$d}))";
+
+                        } else {
+
+                            $_value = \var_export($value, true);
+
+                            $fn[] = "(isset({$d}) && (
+                                is_array({$d}) && is_string({$_value})
+                                    ? in_array({$_value}, {$d})
+                                    : {$d}=={$_value}
+                                )
+                            )";
+                        }
                     }
             }
         }
