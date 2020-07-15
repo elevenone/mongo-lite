@@ -2,6 +2,7 @@ MongoLite
 =========
 
 Schemaless database on top of SqLite
+Note: this repo contains the cockpit version of MongoLite
 
 
 ### Sample Usage
